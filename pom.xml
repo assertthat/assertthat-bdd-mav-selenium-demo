@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.assertthat</groupId>
+    <artifactId>assertthat-bdd-maven-demo</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <dependencies>
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-java</artifactId>
+            <version>6.1.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.assertthat</groupId>
+            <artifactId>selenium-shutterbug</artifactId>
+            <version>0.9.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <version>3.141.59</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.bonigarcia</groupId>
+            <artifactId>webdrivermanager</artifactId>
+            <version>4.0.0</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-junit</artifactId>
+            <version>6.1.1</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>net.masterthought</groupId>
+            <artifactId>cucumber-reporting</artifactId>
+            <version>5.3.0</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+
+
+    </dependencies>
+
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.7.0</version>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <compilerArgument>-Werror</compilerArgument>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!--AssertThat BDD plugin definition start-->
+            <plugin>
+                <groupId>com.assertthat.plugins</groupId>
+                <artifactId>assertthat-bdd-maven-plugin</artifactId>
+                <version>1.6</version>
+                <configuration>
+                    <projectId>
+                        <!--Jira project id e.g. 10001-->
+                    </projectId>
+                    <!--Optional can be supplied as environment variable ASSERTTHAT_ACCESS_KEY -->
+                    <accessKey>
+                        <!-- ASSERTTHAT_ACCESS_KEY -->
+                    </accessKey>
+                    <!--Optional can be supplied as environment variable ASSERTTHAT_SECRET_KEY -->
+                    <secretKey>
+                        <!-- ASSERTTHAT_SECRET_KEY -->
+                    </secretKey>
+                </configuration>
+                <executions>
+                    <execution>
+                        <configuration>
+                            <!--Optional - default ./features-->
+                            <outputFolder>src/test/resources/com/assertthat/features</outputFolder>
+                            <mode>automated</mode>
+                             <!--suppress UnresolvedMavenProperty -->
+                            <!--<tags>(@smoke or @ui) and (not @slow)</tags>-->
+                        </configuration>
+                        <id>features</id>
+                          <goals>
+                            <goal>features</goal>
+                        </goals>
+                        <phase>pre-integration-test</phase>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                        <phase>post-integration-test</phase>
+                        <configuration>
+                            <!--Optional - default ./report-->
+                            <jsonReportFolder>target/report/surefire-reports/cucumber/</jsonReportFolder>
+                            <!--Optional - default - **/*.json -->
+                            <jsonReportIncludePattern>**/cucumber.json</jsonReportIncludePattern>
+                            <metadata>{"user ": "${user.name}"}</metadata>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <!--AssertThat BDD plugin definition end-->
+        </plugins>
+    </build>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+   
+</project>
